@@ -141,13 +141,13 @@ ASGI_APPLICATION = "core.asgi.application"
 DATABASES = {
     "default": {
         "ENGINE": os.environ.get(
-            "DJANGO_DB_ENGINE", "django.db.backends.sqlite3"
+            "DJANGO_DB_ENGINE", "django.db.backends.sqlite3" # Default to SQLite
         ),
-        "NAME": os.environ.get("DJANGO_DB_NAME", BASE_DIR / "db.sqlite3"),
-        "USER": os.environ.get("DJANGO_DB_USER", ""),
-        "PASSWORD": os.environ.get("DJANGO_DB_PASSWORD", ""),
-        "HOST": os.environ.get("DJANGO_DB_HOST", ""),
-        "PORT": os.environ.get("DJANGO_DB_PORT", ""),
+        "NAME": os.environ.get("DJANGO_DB_NAME", BASE_DIR / "db.sqlite3"), # Default to SQLite
+        "USER": os.environ.get("DJANGO_DB_USER", ""), # Default to empty
+        "PASSWORD": os.environ.get("DJANGO_DB_PASSWORD", ""), # Default to empty
+        "HOST": os.environ.get("DJANGO_DB_HOST", ""), # Default to empty
+        "PORT": os.environ.get("DJANGO_DB_PORT", ""), # Default to empty
     }
 }
 
