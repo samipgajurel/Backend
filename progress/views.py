@@ -17,5 +17,5 @@ class ProgressViewSet(ModelViewSet):
 
     def get_permissions(self):
         if self.request.method in ['GET', 'POST', 'PUT', 'PATCH']:
-            return [IsIntern() or IsSupervisor()]
+            return [IsIntern() | IsSupervisor()]
         return super().get_permissions()
