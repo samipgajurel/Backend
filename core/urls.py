@@ -18,31 +18,35 @@ from django.contrib import admin
 from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView
-)
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from interns.views import InternViewSet, AttendanceView, AnalyticsView
 
-
 router = DefaultRouter()
-router.register(r'interns', InternViewSet, basename='intern')
-
+router.register(r"interns", InternViewSet, basename="intern")
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
 
-    # JWT Auth
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # JWT Auth (SimpleJWT default)
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 
-    # Apps
-    path('api/accounts/', include('accounts.urls')),
-    path('api/', include(router.urls)),
+    # Custom auth endpoints (your accounts app)
+    path("api/accounts/", include("accounts.urls")),
 
-    # Reports & Attendance
-    path('api/attendance/', AttendanceView.as_view(), name='attendance'),
-    path('api/analytics/', AnalyticsView.as_view(), name='analytics'),
+    # Router endpoints
+    path("api/", include(router.urls)),  # /api/interns/
+
+    # App routers (these were missing)
+    path("api/attendance/", include("attendance.urls")),  # /api/attendance/attendance/
+    path("api/projects/", include("projects.urls")),      # /api/projects/projects/
+    path("api/progress/", include("progress.urls")),      # /api/progress/progress/
+    path("api/tasks/", include("tasks.urls")),            # /api/tasks/tasks/
+    path("api/feedback/", include("feedback.urls")),      # /api/feedback/feedback/
+
+    # Reports endpoints (renamed to avoid conflict)
+    path("api/reports/attendance/", AttendanceView.as_view(), name="attendance_report"),
+    path("api/reports/analytics/", AnalyticsView.as_view(), name="analytics_report"),
 ]
 
