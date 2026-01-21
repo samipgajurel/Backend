@@ -16,27 +16,33 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from interns.views import InternListCreateView, AttendanceView, AnalyticsView
+
+from rest_framework.routers import DefaultRouter
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView
+)
+
+from interns.views import InternViewSet, AttendanceView, AnalyticsView
+
+
+router = DefaultRouter()
+router.register(r'interns', InternViewSet, basename='intern')
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    # JWT Auth
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path("api/accounts/", include("accounts.urls")),
-    # Include all apps
-    path('api/', include('tasks.urls')),
-    path('api/', include('projects.urls')),
-    path('api/', include('feedback.urls')),
-    path('api/', include('completion.urls')),
-    path('api/', include('attendance.urls')),
-    path('api/', include('progress.urls')),
-    path("api/token/", TokenObtainPairView.as_view()),
-    path("api/token/refresh/", TokenRefreshView.as_view()),
 
-    path("api/interns/", InternListCreateView.as_view()),
-    path("api/attendance/", AttendanceView.as_view()),
-    path("api/analytics/", AnalyticsView.as_view()),
-    
+    # Apps
+    path('api/accounts/', include('accounts.urls')),
+    path('api/', include(router.urls)),
+
+    # Reports & Attendance
+    path('api/attendance/', AttendanceView.as_view(), name='attendance'),
+    path('api/analytics/', AnalyticsView.as_view(), name='analytics'),
 ]
 
